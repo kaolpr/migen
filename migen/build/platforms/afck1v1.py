@@ -1,8 +1,5 @@
-# Founded by Creotech Instruments S.A.
-# www.creotech.pl
-
-from litex.build.generic_platform import *
-from litex.build.xilinx import XilinxPlatform, VivadoProgrammer
+from migen.build.generic_platform import *
+from migen.build.xilinx import XilinxPlatform
 
 _io = [
 
@@ -294,15 +291,25 @@ _io = [
         Subsignal("sda", Pins("G19")),
         IOStandard("LVCMOS25")),
 
-    ("spiflash", 0,
-        Subsignal("cs_n", Pins("U19")),
-        Subsignal("dq", Pins("P24 R25 R20 R21")),
-        IOStandard("LVCMOS25")
-     ),
+    # Dual and quad modes not supported by M25P128 memories
+    # ("spiflash4x", 0,
+    #     Subsignal("cs_n", Pins("U19")),
+    #     Subsignal("dq", Pins("P24 R25 R20 R21")),
+    #     IOStandard("LVCMOS25")
+    #  ),
+    #
+    # ("spiflash2x", 0,
+    #     Subsignal("cs_n", Pins("U19")),
+    #     Subsignal("dq", Pins("P24 R25")),
+    #     Subsignal("wp", Pins("R20")),
+    #     Subsignal("hold", Pins("R21")),
+    #     IOStandard("LVCMOS25")
+    # ),
 
-    ("spiflash2x", 0,
+    ("spiflash1x", 0,
         Subsignal("cs_n", Pins("U19")),
-        Subsignal("dq", Pins("P24 R25")),
+        Subsignal("mosi", Pins("P24")),
+        Subsignal("miso", Pins("R25")),
         Subsignal("wp", Pins("R20")),
         Subsignal("hold", Pins("R21")),
         IOStandard("LVCMOS25")
@@ -321,9 +328,6 @@ _io = [
     ("vcxo_dac_sclk", 0, Pins("AE26"), IOStandard("LVCMOS25")),
 
     ("ddram", 0,
-
-            # FIXME: MiSOC RAM controller does not seem to cooperate with multiple memory devices
-
             Subsignal("a", Pins("AF10 AJ12 AK10 AJ11 AF12 AK11 AH14 AG13 AJ14 AH11 AG9 AH12 AG12 AK13 AJ13 AD11"),
                 IOStandard("SSTL15")),
             Subsignal("ba", Pins("AK9 AH9 AE13"), IOStandard("SSTL15")),
@@ -332,16 +336,11 @@ _io = [
             Subsignal("we_n", Pins("AJ9"), IOStandard("SSTL15")),
             Subsignal("cs_n", Pins("AE10"), IOStandard("SSTL15")),
             Subsignal("dm", Pins("AD3 AF3 AH2 AK6"), IOStandard("SSTL15")),
-            # Subsignal("dm", Pins("AD3 AF3"), IOStandard("SSTL15")),
-            # Subsignal("dq", Pins("AC4 AC2 AC7 AC1 AD4 AD6 AC5 AE6 AE1 AF2 AE4 AF5 AE3 AG5 AE5 AF1"),
-            #                 IOStandard("SSTL15_T_DCI")),
             Subsignal("dq", Pins("AC4 AC2 AC7 AC1 AD4 AD6 AC5 AE6 AE1 AF2 AE4 AF5 AE3 AG5 AE5 AF1 "
                                  "AJ1 AK3 AH5 AJ3 AJ2 AJ4 AH6 AK1 AK5 AJ6 AF8 AJ8 AG7 AK8 AF7 AK4"),
                             IOStandard("SSTL15_T_DCI")),
             Subsignal("dqs_p", Pins("AD2 AG4 AG2 AH7"), IOStandard("DIFF_SSTL15")),
-            # Subsignal("dqs_p", Pins("AD2 AG4"), IOStandard("DIFF_SSTL15")),
             Subsignal("dqs_n", Pins("AD1 AG3 AH1 AJ7"), IOStandard("DIFF_SSTL15")),
-            # Subsignal("dqs_n", Pins("AD1 AG3"), IOStandard("DIFF_SSTL15")),
             Subsignal("clk_p", Pins("AE11"), IOStandard("DIFF_SSTL15")),
             Subsignal("clk_n", Pins("AF11"), IOStandard("DIFF_SSTL15")),
             Subsignal("cke", Pins("AD12"), IOStandard("SSTL15")),
